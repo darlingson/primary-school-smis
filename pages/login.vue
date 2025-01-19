@@ -7,63 +7,38 @@
     <form @submit.prevent="handleLogin" class="space-y-6">
       <!-- Email Field -->
       <div>
-        <label
-            for="email"
-            class="block text-sm font-semibold mb-2"
-            style="color: #333333; font-family: 'Open Sans', sans-serif;"
-        >
+        <label for="email" class="block text-sm font-semibold mb-2"
+          style="color: #333333; font-family: 'Open Sans', sans-serif;">
           Email
         </label>
-        <input
-            id="email"
-            type="email"
-            v-model="email"
-            required
-            class="w-full border border-f1c40f focus:ring focus:ring-3498db px-4 py-3 rounded-md shadow-sm"
-            style="font-family: 'Open Sans', sans-serif; color: #333333; font-size: 14px;"
-        />
+        <input id="email" type="email" v-model="email" required
+          class="w-full border border-f1c40f focus:ring focus:ring-3498db px-4 py-3 rounded-md shadow-sm"
+          style="font-family: 'Open Sans', sans-serif; color: #333333; font-size: 14px;" />
       </div>
 
       <!-- Password Field -->
       <div>
-        <label
-            for="password"
-            class="block text-sm font-semibold mb-2"
-            style="color: #333333; font-family: 'Open Sans', sans-serif;"
-        >
+        <label for="password" class="block text-sm font-semibold mb-2"
+          style="color: #333333; font-family: 'Open Sans', sans-serif;">
           Password
         </label>
-        <input
-            id="password"
-            type="password"
-            v-model="password"
-            required
-            class="w-full border border-f1c40f focus:ring focus:ring-3498db px-4 py-3 rounded-md shadow-sm"
-            style="font-family: 'Open Sans', sans-serif; color: #333333; font-size: 14px;"
-        />
+        <input id="password" type="password" v-model="password" required
+          class="w-full border border-f1c40f focus:ring focus:ring-3498db px-4 py-3 rounded-md shadow-sm"
+          style="font-family: 'Open Sans', sans-serif; color: #333333; font-size: 14px;" />
       </div>
 
       <!-- Submit Button -->
-      <button
-          type="submit"
-          class="w-full text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 focus:ring focus:ring-f1c40f transition-transform transform hover:scale-105"
-          style="font-family: 'Open Sans', sans-serif; font-size: 18px;  background-color: #3498db"
-      >
+      <button type="submit"
+        class="w-full text-white font-semibold py-3 rounded-lg shadow-md hover:bg-blue-600 focus:ring focus:ring-f1c40f transition-transform transform hover:scale-105"
+        style="font-family: 'Open Sans', sans-serif; font-size: 18px;  background-color: #3498db">
         Login
       </button>
     </form>
 
     <!-- Sign-Up Link -->
-    <p
-        class="text-center text-sm"
-        style="color: #333333; font-family: 'Open Sans', sans-serif; font-size: 14px;"
-    >
+    <p class="text-center text-sm" style="color: #333333; font-family: 'Open Sans', sans-serif; font-size: 14px;">
       Don't have an account?
-      <NuxtLink
-          to="/signup"
-          class="font-semibold hover:underline"
-          style="color: #3498db;"
-      >
+      <NuxtLink to="/signup" class="font-semibold hover:underline" style="color: #3498db;">
         Sign up
       </NuxtLink>
     </p>
@@ -74,6 +49,7 @@
 const email = ref('');
 const password = ref('');
 
+const router = useRouter()
 const users = [
   {
     email: 'admin@example.com',
@@ -102,12 +78,44 @@ const users = [
   }
 ];
 
+// const handleLogin = async () => {
+//   console.log('Login:', { email: email.value, password: password.value });
+//   const user = users.find((u) => u.email === email.value && u.password === password.value);
+//   if (user) {
+//     navigateTo(`/dashboard/${user.role}`);
+//   }
+// };
 const handleLogin = async () => {
-  console.log('Login:', { email: email.value, password: password.value });
-  //check for the credentials in the users array and navigate to the appropriate page
-  const user = users.find((u) => u.email === email.value && u.password === password.value);
-  if (user) {
-    navigateTo(`/dashboard/${user.role}`);
+  try {
+    const { data, error } = await useFetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (error.value) {
+      console.error('Login failed:', error.value.data);
+      alert(error.value.data?.statusMessage || 'Login failed. Please try again.');
+      return;
+    }
+
+    if (data.value) {
+      const { token, user } = data.value;
+      // Save token to local storage or a cookie
+      localStorage.setItem('token', token);
+      console.log('Login successful:', user);
+
+      // Redirect based on user role
+      await router.push(`/dashboard/${user.role}`);
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    console.log('An unexpected error occurred. Please try again.');
   }
 };
 </script>
