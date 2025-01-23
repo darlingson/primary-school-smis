@@ -19,7 +19,7 @@
             <!-- Header -->
             <header class="flex items-center justify-between px-6 py-4 bg-white shadow-md">
                 <div class="flex items-center">
-                    <input type="text" placeholder="Search..."
+                    <input type="text" placeholder="Search schools..."
                         class="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-3498db" />
                 </div>
                 <div class="flex items-center">
@@ -28,17 +28,24 @@
                     </button>
                     <button class="ml-4 flex items-center text-gray-700 hover:text-3498db">
                         <img class="h-8 w-8 rounded-full object-cover" src="https://placekitten.com/100/100"
-                            alt="User avatar" />
-                        <span class="ml-2 font-medium">John Doe</span>
+                            alt="Admin avatar" />
+                        <span class="ml-2 font-medium">System Admin</span>
                     </button>
                 </div>
             </header>
 
             <!-- Dashboard -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">School Management Dashboard</h2>
-                <div class="grid md:grid-cols-3 gap-6">
-                    <!-- Quick Stats -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800">Manage Schools</h2>
+                    <button @click="openAddSchoolModal"
+                        class="bg-3498db text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-200">
+                        Add New School
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid md:grid-cols-4 gap-6 mb-6">
                     <div v-for="stat in quickStats" :key="stat.name"
                         class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-3498db">
                         <div class="flex items-center">
@@ -51,50 +58,166 @@
                     </div>
                 </div>
 
-                <!-- Recent Activities -->
-                <div class="mt-8 bg-white rounded-lg shadow-md">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h3 class="text-lg font-semibold text-gray-800">Recent Activities</h3>
-                    </div>
-                    <ul class="divide-y divide-gray-200">
-                        <li v-for="activity in recentActivities" :key="activity.id" class="px-6 py-4 hover:bg-gray-50">
-                            <div class="flex items-center">
-                                <component :is="activity.icon" class="h-6 w-6 text-3498db" />
-                                <p class="ml-4 text-sm text-gray-700">{{ activity.description }}</p>
-                                <span class="ml-auto text-xs text-gray-500">{{ activity.time }}</span>
-                            </div>
-                        </li>
-                    </ul>
+                <!-- Schools Table -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    School Name</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Location</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Admin</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Students</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr v-for="school in schools" :key="school.id">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ school.name }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-500">{{ school.location }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ school.admin }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ school.students }}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span :class="[
+                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                                        school.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                    ]">
+                                        {{ school.status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button @click="editSchool(school.id)"
+                                        class="text-3498db hover:text-blue-900 mr-3">Edit</button>
+                                    <button @click="deleteSchool(school.id)"
+                                        class="text-red-600 hover:text-red-900">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </main>
+        </div>
+
+        <!-- Add School Modal -->
+        <div v-if="showAddSchoolModal"
+            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+            <div class="bg-white p-8 rounded-lg shadow-xl w-96">
+                <h2 class="text-2xl font-semibold mb-4">Add New School</h2>
+                <form @submit.prevent="addSchool">
+                    <div class="mb-4">
+                        <label for="schoolName" class="block text-sm font-medium text-gray-700">School Name</label>
+                        <input type="text" id="schoolName" v-model="newSchool.name"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
+                    </div>
+                    <div class="mb-4">
+                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" id="location" v-model="newSchool.location"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
+                    </div>
+                    <div class="mb-4">
+                        <label for="adminName" class="block text-sm font-medium text-gray-700">Admin Name</label>
+                        <input type="text" id="adminName" v-model="newSchool.admin"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" @click="closeAddSchoolModal"
+                            class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 text-sm font-medium text-white bg-3498db rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-3498db">
+                            Add School
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { HomeIcon, UsersIcon, AcademicCapIcon, BookOpenIcon, CogIcon, BellIcon, UserPlusIcon, PencilIcon, TrashIcon } from 'lucide-vue-next'
+import { HomeIcon, BuildingIcon, UsersIcon, BookOpenIcon, CogIcon, BellIcon, SchoolIcon } from 'lucide-vue-next'
 
 const navItems = [
     { name: 'Dashboard', href: '#', icon: HomeIcon },
-    { name: 'Students', href: '#', icon: UsersIcon },
-    { name: 'Teachers', href: '#', icon: AcademicCapIcon },
-    { name: 'Courses', href: '#', icon: BookOpenIcon },
+    { name: 'Schools', href: '#', icon: BuildingIcon },
+    { name: 'Users', href: '#', icon: UsersIcon },
+    { name: 'Reports', href: '#', icon: BookOpenIcon },
     { name: 'Settings', href: '#', icon: CogIcon },
 ]
 
 const quickStats = [
-    { name: 'Total Students', value: '1,234', icon: UsersIcon },
-    { name: 'Total Teachers', value: '56', icon: AcademicCapIcon },
-    { name: 'Active Courses', value: '28', icon: BookOpenIcon },
+    { name: 'Total Schools', value: '50', icon: BuildingIcon },
+    { name: 'Total Students', value: '10,234', icon: UsersIcon },
+    { name: 'Total Teachers', value: '526', icon: SchoolIcon },
+    { name: 'Active Courses', value: '128', icon: BookOpenIcon },
 ]
 
-const recentActivities = [
-    { id: 1, description: 'New student John Doe enrolled', time: '2 hours ago', icon: UserPlusIcon },
-    { id: 2, description: 'Course "Mathematics 101" updated', time: '4 hours ago', icon: PencilIcon },
-    { id: 3, description: 'Teacher Jane Smith added', time: '1 day ago', icon: UserPlusIcon },
-    { id: 4, description: 'Student Mark Johnson withdrawn', time: '2 days ago', icon: TrashIcon },
-]
+const schools = ref([
+    { id: 1, name: 'Springfield Elementary', location: 'Springfield, IL', admin: 'Seymour Skinner', students: 500, status: 'Active' },
+    { id: 2, name: 'Hogwarts School', location: 'Scotland, UK', admin: 'Albus Dumbledore', students: 1000, status: 'Active' },
+    { id: 3, name: 'Xavier\'s School for Gifted Youngsters', location: 'Westchester County, NY', admin: 'Charles Xavier', students: 100, status: 'Active' },
+    { id: 4, name: 'Sunnydale High School', location: 'Sunnydale, CA', admin: 'R. Snyder', students: 750, status: 'Inactive' },
+    { id: 5, name: 'Greendale Community College', location: 'Greendale, CO', admin: 'Dean Craig Pelton', students: 1500, status: 'Active' },
+])
+
+const showAddSchoolModal = ref(false)
+const newSchool = ref({
+    name: '',
+    location: '',
+    admin: '',
+})
+
+const openAddSchoolModal = () => {
+    showAddSchoolModal.value = true
+}
+
+const closeAddSchoolModal = () => {
+    showAddSchoolModal.value = false
+    newSchool.value = { name: '', location: '', admin: '' }
+}
+
+const addSchool = () => {
+    // Here you would typically make an API call to add the school
+    schools.value.push({
+        id: schools.value.length + 1,
+        ...newSchool.value,
+        students: 0,
+        status: 'Active'
+    })
+    closeAddSchoolModal()
+}
+
+const editSchool = (id) => {
+    // Implement edit functionality
+    console.log('Edit school', id)
+}
+
+const deleteSchool = (id) => {
+    // Implement delete functionality
+    console.log('Delete school', id)
+}
 </script>
 
 <style>
