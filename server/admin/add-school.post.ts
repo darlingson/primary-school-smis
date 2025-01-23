@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     } catch (error) {
         return {
             status: 'error',
-            error: error.message
+            error: error instanceof Error ? error.message : 'An unknown error occurred'
         }
     }
 })

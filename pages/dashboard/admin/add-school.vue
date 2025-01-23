@@ -121,14 +121,11 @@ const handleSubmit = async () => {
 
         console.log('School and admin added successfully:', response);
 
-        // Reset form
         school.value = { name: '', address: '', phone_number: '' };
         admin.value = { firstname: '', lastname: '', email: '', password: '', role: 'school_admin' };
 
-        // Show success message (you might want to use a proper notification system)
         alert('School and admin added successfully!');
 
-        // Redirect to schools list or dashboard
         router.push('/schools');
     } catch (error) {
         console.error('Error adding school and admin:', error);
