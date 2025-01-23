@@ -129,7 +129,6 @@ const handleSubmit = async () => {
         router.push('/schools');
     } catch (error) {
         console.error('Error adding school and admin:', error);
-        // Handle error (e.g., show error message)
         alert('Error adding school and admin. Please try again.');
     }
 };

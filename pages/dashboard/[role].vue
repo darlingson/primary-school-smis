@@ -9,29 +9,17 @@
 
     <!-- Modules Section -->
     <div class="grid md:grid-cols-3 gap-6">
-      <div
-          v-for="(module, index) in modules"
-          :key="index"
-          class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-3498db"
-          style="font-family: 'Open Sans', sans-serif; border-color: #3498db"
-      >
-        <h3
-            class="text-lg font-semibold mb-2"
-            style="color: #333333; font-size: 18px;"
-        >
+      <div v-for="(module, index) in modules" :key="index"
+        class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-3498db"
+        style="font-family: 'Open Sans', sans-serif; border-color: #3498db">
+        <h3 class="text-lg font-semibold mb-2" style="color: #333333; font-size: 18px;">
           {{ module.title }}
         </h3>
-        <p
-            class="text-sm mb-4"
-            style="color: #333333; font-size: 14px;"
-        >
+        <p class="text-sm mb-4" style="color: #333333; font-size: 14px;">
           {{ module.description }}
         </p>
-        <NuxtLink
-            :to="module.link"
-            class="inline-block text-3498db font-semibold hover:underline"
-            style="font-size: 14px;"
-        >
+        <NuxtLink :to="module.link" class="inline-block text-3498db font-semibold hover:underline"
+          style="font-size: 14px;">
           Access Module →
         </NuxtLink>
       </div>
@@ -65,7 +53,7 @@ const modules = computed(() => {
       {
         title: 'School Management',
         description: 'Oversee all registered schools',
-        link: '/schools'
+        link: '/dashboard/admin/schools'
       },
       {
         title: 'System Settings',
@@ -152,6 +140,7 @@ const modules = computed(() => {
 div[role='module'] {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 div[role='module']:hover {
   transform: translateY(-2px);
 }
