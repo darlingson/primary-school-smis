@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import {ref} from 'vue';
 import {useRouter} from 'vue-router';
+import { defineEmits } from 'vue';
 
+const emit = defineEmits();
+
+function emitCloseModalEvent() {
+  emit('close-modal-event', 'close modal');
+}
 const router = useRouter();
 
 const school = ref({
@@ -120,6 +126,16 @@ const handleSubmit = async () => {
           </button>
         </div>
       </form>
+      <br/>
+      <hr/>
+      <div class="row-span-2 py-2">
+        <div></div>
+        <div class="flex justify-end">
+          <button @click="emitCloseModalEvent" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            close
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>

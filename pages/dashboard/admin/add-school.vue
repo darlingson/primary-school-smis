@@ -85,6 +85,12 @@
                     </div>
                 </div>
             </div>
+          <div class="row-span-2">
+            <div></div>
+            <div>
+              <button @click="clickHandler">Click me</button>
+            </div>
+          </div>
         </div>
     </div>
 </template>
@@ -92,7 +98,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-
 const router = useRouter();
 
 const school = ref({
@@ -131,5 +136,9 @@ const handleSubmit = async () => {
         console.error('Error adding school and admin:', error);
         alert('Error adding school and admin. Please try again.');
     }
+};
+
+const clickHandler = () => {
+  emit('customEvent', 'Hello from Composition API!');
 };
 </script>
