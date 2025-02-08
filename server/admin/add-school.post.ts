@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import {createClient} from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
     try {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
         )
         const body = await readBody(event)
 
-        const { data, error } = await supabase
+        const {data, error} = await supabase
             .from('schools')
             .insert([
                 {
@@ -24,7 +24,44 @@ export default defineEventHandler(async (event) => {
         if (error) {
             throw error
         }
-
+        //if the school insert is successful, create classes from std 1 to 8
+        const school_id = data[0].id;
+        const {data: class_data, error: class_error} = await supabase
+            .from("classes")
+            .insert([
+                    {
+                        name: "standard 1",
+                        school_id: school_id
+                    }, {
+                        name: "standard 2",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 3",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 4",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 5",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 6",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 7",
+                        school_id: school_id
+                    },
+                    {
+                        name: "standard 8",
+                        school_id: school_id
+                    }
+                ]
+            )
         return {
             status: 'success',
             data
