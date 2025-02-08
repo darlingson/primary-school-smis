@@ -7,21 +7,22 @@ export default defineEventHandler(async (event) => {
             process.env.SUPABASE_KEY as string
         )
         const body = await readBody(event)
-
+        const school = body.school
+        console.log(body);
         const {data, error} = await supabase
             .from('schools')
             .insert([
                 {
-                    name: body.name,
-                    location: body.location,
-                    contact_email: body.contactEmail,
-                    contact_phone: body.contactPhone,
-                    address: body.address
+                    name: school.name,
+                    phone_number: school.phone_number,
+                    address: school.address
                 }
             ])
             .select()
 
+        console.log(data)
         if (error) {
+            console.log(error);
             throw error
         }
         //if the school insert is successful, create classes from std 1 to 8
@@ -67,6 +68,7 @@ export default defineEventHandler(async (event) => {
             data
         }
     } catch (error) {
+        console.log(error)
         return {
             status: 'error',
             error: error instanceof Error ? error.message : 'An unknown error occurred'

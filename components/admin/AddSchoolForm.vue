@@ -20,7 +20,7 @@ const admin = ref({
 
 const handleSubmit = async () => {
   try {
-    const response = await $fetch('/api/schools', {
+    const response = await $fetch('/api/admin/add-school', {
       method: 'POST',
       body: JSON.stringify({
         school: school.value,
