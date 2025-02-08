@@ -119,46 +119,49 @@
         </div>
 
         <!-- Add School Modal -->
-        <div v-if="showAddSchoolModal"
-            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
-            <div class="bg-white p-8 rounded-lg shadow-xl w-96">
-                <h2 class="text-2xl font-semibold mb-4">Add New School</h2>
-                <form @submit.prevent="addSchool">
-                    <div class="mb-4">
-                        <label for="schoolName" class="block text-sm font-medium text-gray-700">School Name</label>
-                        <input type="text" id="schoolName" v-model="newSchool.name"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
-                    </div>
-                    <div class="mb-4">
-                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
-                        <input type="text" id="location" v-model="newSchool.location"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
-                    </div>
-                    <div class="mb-4">
-                        <label for="adminName" class="block text-sm font-medium text-gray-700">Admin Name</label>
-                        <input type="text" id="adminName" v-model="newSchool.admin"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" @click="closeAddSchoolModal"
-                            class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-                            Cancel
-                        </button>
-                        <button type="submit"
-                            class="px-4 py-2 text-sm font-medium text-white bg-3498db rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-3498db">
-                            Add School
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+<!--        <div v-if="showAddSchoolModal"-->
+<!--            class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">-->
+<!--            <div class="bg-white p-8 rounded-lg shadow-xl w-96">-->
+<!--                <h2 class="text-2xl font-semibold mb-4">Add New School</h2>-->
+<!--                <form @submit.prevent="addSchool">-->
+<!--                    <div class="mb-4">-->
+<!--                        <label for="schoolName" class="block text-sm font-medium text-gray-700">School Name</label>-->
+<!--                        <input type="text" id="schoolName" v-model="newSchool.name"-->
+<!--                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">-->
+<!--                    </div>-->
+<!--                    <div class="mb-4">-->
+<!--                        <label for="location" class="block text-sm font-medium text-gray-700">Location</label>-->
+<!--                        <input type="text" id="location" v-model="newSchool.location"-->
+<!--                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">-->
+<!--                    </div>-->
+<!--                    <div class="mb-4">-->
+<!--                        <label for="adminName" class="block text-sm font-medium text-gray-700">Admin Name</label>-->
+<!--                        <input type="text" id="adminName" v-model="newSchool.admin"-->
+<!--                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-3498db focus:ring focus:ring-3498db focus:ring-opacity-50">-->
+<!--                    </div>-->
+<!--                    <div class="flex justify-end">-->
+<!--                        <button type="button" @click="closeAddSchoolModal"-->
+<!--                            class="mr-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">-->
+<!--                            Cancel-->
+<!--                        </button>-->
+<!--                        <button type="submit"-->
+<!--                            class="px-4 py-2 text-sm font-medium text-white bg-3498db rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-3498db">-->
+<!--                            Add School-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+      <div v-if="showAddSchoolModal">
+        <AddSchoolForm/>
+      </div>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { HomeIcon, BuildingIcon, UsersIcon, BookOpenIcon, CogIcon, BellIcon, SchoolIcon } from 'lucide-vue-next'
-
+import AddSchoolForm from "~/components/admin/AddSchoolForm.vue";
 const navItems = [
     { name: 'Dashboard', href: '#', icon: HomeIcon },
     { name: 'Schools', href: '#', icon: BuildingIcon },
