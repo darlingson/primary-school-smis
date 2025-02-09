@@ -36,8 +36,8 @@ const handleSubmit = async () => {
 
     console.log('School and admin added successfully:', response);
 
-    school.value = {name: '', address: '', phone_number: ''};
-    admin.value = {firstname: '', lastname: '', email: '', password: '', role: 'school_admin'};
+    // school.value = {name: '', address: '', phone_number: ''};
+    // admin.value = {firstname: '', lastname: '', email: '', password: '', role: 'school_admin'};
 
     alert('School and admin added successfully!');
 
