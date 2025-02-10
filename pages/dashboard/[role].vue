@@ -8,7 +8,10 @@
     </header>
 
     <!-- Modules Section -->
-    <div class="grid md:grid-cols-3 gap-6">
+    <div v-if="role == 'school_admin'">
+      <dashboard/>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6" v-else>
       <div v-for="(module, index) in modules" :key="index"
         class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow border-t-4 border-3498db"
         style="font-family: 'Open Sans', sans-serif; border-color: #3498db">
@@ -28,6 +31,8 @@
 </template>
 
 <script setup>
+import Dashboard from "~/pages/dashboard/school_admin/dashboard.vue";
+
 const route = useRoute()
 const role = route.params.role
 
