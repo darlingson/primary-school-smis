@@ -33,7 +33,6 @@ export default defineEventHandler(async (event): Promise<ApiResponse<Registratio
             'firstname',
             'lastname',
             'email',
-            'password',
             'guardian_name',
             'guardian_phone',
             'date_of_birth'
