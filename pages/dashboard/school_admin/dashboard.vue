@@ -65,7 +65,8 @@
 
     <!-- Add Modal -->
     <UModal v-model="isModalOpen" :ui="{ width: 'sm:max-w-lg' }">
-      <UCard :ui="{ divide: 'divide-y divide-gray-100', ring: '', shadow: 'shadow-xl' }">
+      <AddClassForm v-if="currentSection === 'Classes'" @closeModal="isModalOpen = false"/>
+      <UCard :ui="{ divide: 'divide-y divide-gray-100', ring: '', shadow: 'shadow-xl' }" v-else>
         <template #header>
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-gray-900">Add New {{ capitalizeFirstLetter(currentSection) }}</h3>
@@ -97,7 +98,7 @@ import {
   ClipboardList,
   SquareActivity
 } from 'lucide-vue-next'
-
+import AddClassForm from '~/components/school_admin/AddClassForm.vue';
 type SectionName = 'Classes' | 'Students' | 'Subjects' | 'Teachers' | 'Admins';
 
 interface NavItem {
