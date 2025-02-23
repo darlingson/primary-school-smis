@@ -66,6 +66,7 @@
     <!-- Add Modal -->
     <UModal v-model="isModalOpen" :ui="{ width: 'sm:max-w-lg' }">
       <AddClassForm v-if="currentSection === 'Classes'" @closeModal="isModalOpen = false"/>
+      <AddSubjectForm v-else-if="currentSection === 'Subjects'" @closeModal="isModalOpen = false"/>
       <UCard :ui="{ divide: 'divide-y divide-gray-100', ring: '', shadow: 'shadow-xl' }" v-else>
         <template #header>
           <div class="flex items-center justify-between">
@@ -99,6 +100,7 @@ import {
   SquareActivity
 } from 'lucide-vue-next'
 import AddClassForm from '~/components/school_admin/AddClassForm.vue';
+import AddSubjectForm from "~/components/school_admin/AddSubjectForm.vue";
 type SectionName = 'Classes' | 'Students' | 'Subjects' | 'Teachers' | 'Admins';
 
 interface NavItem {
