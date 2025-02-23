@@ -1,0 +1,11 @@
+import { defineEventHandler } from 'h3'
+import useSupabaseClient from "~/composables/useSupabase";
+
+export default defineEventHandler(async (event) => {
+    const body = await readBody(event);
+    console.log(body)
+    const supabase = useSupabaseClient();
+    const schoolId = event.context.params?.schoolId;
+    const classId = event.context.params?.classId;
+
+})

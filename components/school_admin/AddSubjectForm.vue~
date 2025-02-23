@@ -39,7 +39,7 @@ const handleSubmit = async () => {
       class_id: class_id,
     }));
 
-    const response = await $fetch(`/api/school/7/classes/${class_id}/add-subjects/`, {
+    const response = await $fetch('/api/school-admin/add-subjects/', {
       method: 'POST',
       body: JSON.stringify({ subjects }),
     });
