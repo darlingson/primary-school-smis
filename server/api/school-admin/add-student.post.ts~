@@ -27,6 +27,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<Registratio
 
     try {
         const body = await readBody(event);
+        console.log(body)
         const { student } = body as { student: Partial<StudentRegistration> };
 
         const requiredFields: (keyof StudentRegistration)[] = [
